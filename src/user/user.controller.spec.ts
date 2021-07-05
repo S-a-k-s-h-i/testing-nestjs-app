@@ -9,30 +9,32 @@ describe('UserController', () => {
   let controller: UserController;
   let service: UserService;
 
+  const mockUserService =  {
+    createOne: jest.fn().mockImplementation((userDto: CreateUserDto) => {
+      return Promise.resolve({ id: 'a uuid..', ...userDto });
+    }),
+    findAll: jest.fn().mockResolvedValue([
+      { firstName: "seema", lastName: "ss", userName: "seema", age: 20, isActive: true },
+      { firstName: "reema", lastName: "rr", userName: "reema", age: 22, isActive: false },
+    ]),
+    findOneUser: jest.fn().mockImplementation((id: string) => {
+      return Promise.resolve({ firstName: "seema", lastName: "ss", userName: "seema", age: 20, isActive: true, id })
+    }),
+    update: jest.fn().mockImplementation((updateDto: UpdateUserDto) => {
+      return Promise.resolve({ firstName: "seema", lastName: "ss", userName: "seema", age: 20, isActive: true, id: "a uuid" })
+    }),
+    remove: jest.fn().mockImplementation((id: string) => {
+      return Promise.resolve({ deleted: true })
+    })
+  }
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
       providers: [
         {
           provide: UserService,
-          useValue: {
-            createOne: jest.fn().mockImplementation((userDto: CreateUserDto) => {
-              return Promise.resolve({ id: 'a uuid..', ...userDto });
-            }),
-            findAll: jest.fn().mockResolvedValue([
-              { firstName: "seema", lastName: "ss", userName: "seema", age: 20, isActive: true },
-              { firstName: "reema", lastName: "rr", userName: "reema", age: 22, isActive: false },
-            ]),
-            findOneUser: jest.fn().mockImplementation((id: string) => {
-              return Promise.resolve({ firstName: "seema", lastName: "ss", userName: "seema", age: 20, isActive: true, id })
-            }),
-            update: jest.fn().mockImplementation((updateDto: UpdateUserDto) => {
-              return Promise.resolve({ firstName: "seema", lastName: "ss", userName: "seema", age: 20, isActive: true, id: "a uuid" })
-            }),
-            remove: jest.fn().mockImplementation((id: string) => {
-              return Promise.resolve({ deleted: true })
-            })
-          }
+          useValue:mockUserService
         }
       ],
     }).compile();
