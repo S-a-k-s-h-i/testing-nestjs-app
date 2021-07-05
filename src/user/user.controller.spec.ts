@@ -119,6 +119,13 @@ describe('UserController', () => {
         }
       })
     })
+    it("should throw an error if the user doesn't exist with the given id",async() => {
+      jest.spyOn(service,"findOneUser").mockRejectedValue(new NotFoundException("USER NOT FOUND"));
+      const nonExistentId = 'abcd';
+      await expect(controller.findById(nonExistentId)).rejects.toThrow(new NotFoundException("USER NOT FOUND"));
+      expect(service.findOneUser).toHaveBeenCalledWith(nonExistentId);
+
+  })
   })
   
   describe("remove", () => {
@@ -128,6 +135,13 @@ describe('UserController', () => {
         message: 'User deleted successfully'
       })
     })
+    it("should throw an error if the user doesn't exist with the given id",async() => {
+      jest.spyOn(service,"findOneUser").mockRejectedValue(new NotFoundException("USER NOT FOUND"));
+      const nonExistentId = 'abcd';
+      await expect(controller.findById(nonExistentId)).rejects.toThrow(new NotFoundException("USER NOT FOUND"));
+      expect(service.findOneUser).toHaveBeenCalledWith(nonExistentId);
+
+  })
   })
 
 

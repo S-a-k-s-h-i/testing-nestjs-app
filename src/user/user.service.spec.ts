@@ -75,13 +75,24 @@ describe('UserService', () => {
         isActive: true
       })).resolves.toEqual(user)
     })
+
+    it("should throw an error as user doesn't exist",async() => {
+      jest.spyOn(mockRepo,"findOne").mockResolvedValueOnce(null);
+      const nonExistentId = 'abcd';
+      await expect(service.findOneUser(nonExistentId)).rejects.toThrow(new NotFoundException("USER NOT FOUND"));
+    })
   })
 
   describe("remove",() => {
     it("should remove a user",() => {
         expect(service.remove('a uuid')).resolves.toEqual({deleted:true})
     })
-
+    
+    it("should throw an error as user doesn't exist",async() => {
+      jest.spyOn(mockRepo,"findOne").mockResolvedValueOnce(null);
+      const nonExistentId = 'abcd';
+      await expect(service.findOneUser(nonExistentId)).rejects.toThrow(new NotFoundException("USER NOT FOUND"));
+    })
     
   })
 
